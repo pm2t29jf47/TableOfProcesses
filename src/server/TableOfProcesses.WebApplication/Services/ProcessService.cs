@@ -29,6 +29,89 @@ namespace TableOfProcesses.WebApplication.Services
             };
 
             return result;
-        }                
-    }
+        }     
+        
+        private ProcessItemResponse readDataFromProcess(Process process)
+        {
+            try
+            {
+                processName = process.ProcessName;
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine($"Time: {DateTime.UtcNow}, Level: Error, Message:{ex.Message}");
+            }
+
+            try
+            {
+                processName = process.ProcessName;
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine($"Time: {DateTime.UtcNow}, Level: Error, Message:{ex.Message}");
+            }
+
+
+
+            return new ProcessItemResponse()
+            {
+                Pid = TryGetIdFromProcess(process),
+                Command = TryGetProcessNameFromProcess(process),
+                NonpagedSystemMemorySize64InBytes = TryGetNonpagedSystemMemorySize64FromProcess(process),
+                PagedMemorySize64InBytes = TryGetpagedMemorySize64FromProcess(process);
+            };
+        }
+
+        private static int? TryGetIdFromProcess(Process process)
+        {
+            try
+            {
+                return process.Id;
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine($"Time: {DateTime.UtcNow}, Level: Error, Message:{ex.Message}");
+                return null;
+            }
+        }
+
+        private static string TryGetProcessNameFromProcess(Process process)
+        {
+            try
+            {
+                return process.ProcessName;
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine($"Time: {DateTime.UtcNow}, Level: Error, Message:{ex.Message}");
+                return null;
+            }
+        }
+
+        private static long? TryGetNonpagedSystemMemorySize64FromProcess(Process process)
+        {
+            try
+            {
+                return process.NonpagedSystemMemorySize64;
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine($"Time: {DateTime.UtcNow}, Level: Error, Message:{ex.Message}");
+                return null;
+            }
+        }
+
+        private static long? TryGetpagedMemorySize64FromProcess(Process process)
+        {
+            try
+            {
+                return process.PagedMemorySize64;
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine($"Time: {DateTime.UtcNow}, Level: Error, Message:{ex.Message}");
+                return null;
+            }
+        }        
+    
 }

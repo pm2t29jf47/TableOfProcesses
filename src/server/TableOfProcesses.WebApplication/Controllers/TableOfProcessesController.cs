@@ -15,14 +15,16 @@ namespace TableOfProcesses.WebApplication.Controllers
         [HttpGet("statistics")]
         public ActionResult<StatisticsResponse> GetStatistics()
         {
+            Console.WriteLine($"Time: {DateTime.UtcNow}, Level: Info, Message: Incoming request");
             var processService = new ProcessService();
             
             try
-            {                
+            {
                 return processService.GetStatistics();
             }
             catch(Exception ex)
-            {
+            {                
+                Console.WriteLine($"Time: {DateTime.UtcNow}, Level: Error, Message:{ex.Message}");
                 return BadRequest(new { exceptionMessage = ex.Message });
             }                       
         }        
