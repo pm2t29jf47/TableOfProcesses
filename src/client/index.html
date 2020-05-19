@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <script type="text/javascript" src="Script1.js"></script>
+    <h3>
+        Nonpaged System Memory Size: <span id="nonpaged-system-memory-size"></span> Bytes
+    </h3>
+    <h3>
+        Paged Memory Size: <span id="paged-memory-size"></span> Bytes
+    </h3>
+    <h4>
+        Table of processess
+    </h4>
+    <table id="table-of-processes">        
+        <thead>
+            <th>Pid</th>
+            <th>Command</th>
+            <th>Nonpaged, Bytes</th>
+            <th>Paged, Bytes</th>
+        </thead>
+        <tbody id="table-of-processes-body"></tbody>
+    </table>
+    
+
+</body>
+</html>
