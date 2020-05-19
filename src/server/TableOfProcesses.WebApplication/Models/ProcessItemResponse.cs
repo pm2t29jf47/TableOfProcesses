@@ -13,6 +13,10 @@ namespace TableOfProcesses.WebApplication.Models
 
         public long? NonpagedSystemMemorySize64InBytes { get; set; }
 
-        public long? PagedMemorySize64InBytes { get; set; }        
+        public long? PagedMemorySize64InBytes { get; set; }   
+        
+        public long? WorkingSet64InBytes { get; set; }
+
+        public double? TotalProcessorTimeInMilliseconds { get; set; }
     }
 }
