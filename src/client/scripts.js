@@ -16,7 +16,14 @@ async function loadStatistics() {
 function populateTableBody(tableBody, data) {
     let html = '';
     for (let element of data) {
-        html += `<tr><td>${element.pid}</td><td>${element.command}</td><td>${element.nonpagedSystemMemorySize64InBytes}</td><td>${element.pagedMemorySize64InBytes}</td></tr>`;
+        html += `<tr>
+                    <td>${element.pid}</td>
+                    <td>${element.command}</td>
+                    <td>${element.nonpagedSystemMemorySize64InBytes}</td>
+                    <td>${element.pagedMemorySize64InBytes}</td>
+                    <td>${element.workingSet64InBytes}</td>
+                    <td>${element.totalProcessorTimeInMilliseconds}</td>
+                </tr>`;
     }
     tableBody.innerHTML = html;
 }
