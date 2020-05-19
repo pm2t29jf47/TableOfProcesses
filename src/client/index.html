@@ -15,7 +15,7 @@
     </style>
 </head>
 <body>
-    <script type="text/javascript" src="Script1.js"></script>
+    <script type="text/javascript" src="scripts.js"></script>
     <h3>
         Nonpaged System Memory Size: <span id="nonpaged-system-memory-size"></span> Bytes
     </h3>
@@ -23,14 +23,18 @@
         Paged Memory Size: <span id="paged-memory-size"></span> Bytes
     </h3>
     <h4>
-        Table of processess
+        Table of processes
     </h4>
-    <table id="table-of-processes">        
+    <table id="table-of-processes">
         <thead>
-            <th>Pid</th>
-            <th>Command</th>
-            <th>Nonpaged, Bytes</th>
-            <th>Paged, Bytes</th>
+            <tr>
+                <td>Pid</td>
+                <td>Command</td>
+                <td>Nonpaged, bytes</td>
+                <td>Paged, bytes</td>
+                <td>Working set, bytes</td>
+                <td>Total processor time, ms</td>
+            </tr>
         </thead>
         <tbody id="table-of-processes-body"></tbody>
     </table>
