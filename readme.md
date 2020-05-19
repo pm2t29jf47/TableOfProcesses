@@ -5,3 +5,11 @@ Design, document and implement a system that monitors currently running processe
 Try to minimize a number of external libraries and dependencies you use in this project - imagine that you have to do this task on computer with clean Visual Studio installation without internet access. The goal is to demonstrate your ability to write code and address problems.
 
 Bonus part: Implement notifications about high load (CPU, Memory, etc.) to all connected clients. 
+
+
+# System documentation
+
+Client: HTML + JavaScript. 
+
+Server: WebApplication with REST API (.NET Core 3.1).
+
