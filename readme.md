@@ -9,7 +9,14 @@ Bonus part: Implement notifications about high load (CPU, Memory, etc.) to all c
 
 # System documentation
 
-Client: HTML + JavaScript. 
+Client: HTML + JavaScript.
 
 Server: WebApplication with REST API (.NET Core 3.1).
 
+## How to run?
+1) Build in Visual Studio.
+2) Start with IIS Express profile.
+3) Open http://localhost:50253/api/tableofprocesses/statistics to see results from server.
+4) Open ```src\client\index.html``` to see how client is working.
+
+![client-work-example](images/client-work-example.png)
