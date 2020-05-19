@@ -20,45 +20,26 @@ namespace TableOfProcesses.WebApplication.Services
         public StatisticsResponse GetStatistics()
         {
             var foundProcesses = processDataAccess.GetProcesses();
+            var preparedProcesses = foundProcesses.Select(ReadDataFromProcess).ToList();
 
             var result = new StatisticsResponse()
             {
-                processes = foundProcesses.Select(Helpers.Map),
-                SumNonpagedSystemMemorySize64InBytes = foundProcesses.Sum(x => x.NonpagedSystemMemorySize64),
-                SumPagedMemorySize64InBytes = foundProcesses.Sum(x => x.PagedMemorySize64)
+                processes = preparedProcesses.OrderBy(x => x.Pid).ToList(),
+                SumNonpagedSystemMemorySize64InBytes = preparedProcesses.Sum(x => x.NonpagedSystemMemorySize64InBytes ?? 0),
+                SumPagedMemorySize64InBytes = preparedProcesses.Sum(x => x.PagedMemorySize64InBytes ?? 0)
             };
 
             return result;
-        }     
-        
-        private ProcessItemResponse readDataFromProcess(Process process)
+        }
+
+        private ProcessItemResponse ReadDataFromProcess(Process process)
         {
-            try
-            {
-                processName = process.ProcessName;
-            }
-            catch (InvalidOperationException ex)
-            {
-                Console.WriteLine($"Time: {DateTime.UtcNow}, Level: Error, Message:{ex.Message}");
-            }
-
-            try
-            {
-                processName = process.ProcessName;
-            }
-            catch (InvalidOperationException ex)
-            {
-                Console.WriteLine($"Time: {DateTime.UtcNow}, Level: Error, Message:{ex.Message}");
-            }
-
-
-
             return new ProcessItemResponse()
             {
                 Pid = TryGetIdFromProcess(process),
                 Command = TryGetProcessNameFromProcess(process),
                 NonpagedSystemMemorySize64InBytes = TryGetNonpagedSystemMemorySize64FromProcess(process),
-                PagedMemorySize64InBytes = TryGetpagedMemorySize64FromProcess(process);
+                PagedMemorySize64InBytes = TryGetpagedMemorySize64FromProcess(process)
             };
         }
 
@@ -112,6 +93,6 @@ namespace TableOfProcesses.WebApplication.Services
                 Console.WriteLine($"Time: {DateTime.UtcNow}, Level: Error, Message:{ex.Message}");
                 return null;
             }
-        }        
-    
+        }
+    }    
 }
