@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using TableOfProcesses.WebApplication.Helpers;
 using TableOfProcesses.WebApplication.Models;
 using TableOfProcesses.WebApplication.Notifications;
 using TableOfProcesses.WebApplication.Services;
@@ -14,36 +15,45 @@ namespace TableOfProcesses.WebApplication.Controllers
     [ApiController]
     public class TableOfProcessesController : ControllerBase
     {
+        private readonly IProcessService processService;
+
+        public TableOfProcessesController(IProcessService processService)
+        {
+            this.processService = processService;
+        }
+
         [HttpGet("statistics")]
         public ActionResult<StatisticsResponse> GetStatistics()
-        {
-            Console.WriteLine($"Time: {DateTime.UtcNow}, Level: Info, Message: Incoming request");
-            var processService = new ProcessService();
-            
+        {            
+            Helper.LogInfo("GetStatistics()", "Begin execution");
             try
             {
+                Helper.LogInfo("GetStatistics()", "End execution");
                 return processService.GetStatistics();
             }
             catch(Exception ex)
-            {                
-                Console.WriteLine($"Time: {DateTime.UtcNow}, Level: Error, Message:{ex.Message}");
+            {
+                Helper.LogError("GetStatistics()", ex.Message);
+                Helper.LogInfo("GetStatistics()", "End execution");
                 return BadRequest(new { exceptionMessage = ex.Message });
-            }           
+            }            
         }
         
         [HttpGet("notifyme")]
         public async Task<ActionResult<string>> GetNotification()
         {
-            Console.WriteLine($"Time: {DateTime.UtcNow}, Level: Info, Message: TableOfProcesses/notifyme");
+            Helper.LogInfo("GetNotification()", "Begin execution");            
             var notificationService = new LongPollingInfrastructure();
             var message = await notificationService.WaitAsync();
-            return message;
+            Helper.LogInfo("GetNotification()", message);
+            Helper.LogInfo("GetNotification()", "End execution");            
+            return message;            
         }
 
         [HttpGet("doknock")]
         public void DoKnock()
         {
-            LongPollingInfrastructure.PublishNotification("PID 34 CPU 40%");            
+            LongPollingInfrastructure.PublishNotification("knock knock");            
         }
     }
 }
