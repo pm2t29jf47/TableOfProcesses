@@ -11,15 +11,15 @@ namespace TableOfProcesses.WebApplication.Services
 {
     public class ProcessService : IProcessService
     {
-        private readonly IProcessDataAccess processDataAccess;
-        public ProcessService()
+        private readonly IProcessesDataAccess processesDataAccess;
+        public ProcessService(IProcessesDataAccess processesDataAccess)
         {
-            this.processDataAccess = new ProcessessDataAccess();
+            this.processesDataAccess = processesDataAccess;
         }
 
         public StatisticsResponse GetStatistics()
         {
-            var foundProcesses = processDataAccess.GetProcesses();
+            var foundProcesses = processesDataAccess.GetProcesses();
             var preparedProcesses = foundProcesses.Select(ReadDataFromProcess).ToList();
 
             var result = new StatisticsResponse()
