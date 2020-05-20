@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using TableOfProcesses.WebApplication.Models;
+﻿using TableOfProcesses.WebApplication.Models;
 
 namespace TableOfProcesses.WebApplication.Services
 {
+    /// <summary>
+    /// Business logic layer
+    /// </summary>
     public interface IProcessService
     {
         /// <summary>
         /// Statistics about processes
-        /// </summary>
-        /// <returns></returns>
+        /// </summary>        
         public StatisticsResponse GetStatistics();
     }
 }

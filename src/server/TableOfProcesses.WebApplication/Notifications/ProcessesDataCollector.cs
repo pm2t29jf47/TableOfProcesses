@@ -15,7 +15,7 @@ namespace TableOfProcesses.WebApplication.Notifications
 		private readonly IProcessesDataAccess processesDataAccess;
 		public ProcessesDataCollector(IProcessesDataAccess processesDataAccess)
 		{
-			this.processesDataAccess = processesDataAccess;
+			this.processesDataAccess = processesDataAccess ?? throw new ArgumentNullException(nameof(processesDataAccess));
 		}
 
 		public Task StartAsync(CancellationToken cancellationToken)
@@ -24,7 +24,7 @@ namespace TableOfProcesses.WebApplication.Notifications
 			{
 				double previousTotalProcessesTimeMs = 0;
 				var previousTimeStamp = DateTime.UtcNow;
-				double cpuThreshold = 0.1;
+				double cpuThreshold = 0.3;
 				long bytesInGigabyte = 1000000000;
 				long memThreshold = bytesInGigabyte * 5;
 				var refreshTime = TimeSpan.FromSeconds(3);
@@ -53,7 +53,7 @@ namespace TableOfProcesses.WebApplication.Notifications
 					if (totalProcessesTimeSpanMs > cpuThresholdTimeSpanMs || totalProcessesMemorySizeInBytes > memThreshold)
 					{
 						var cpuValue = Math.Round((totalProcessesTimeSpanMs / cpuTimeSpanMs) * 100, 2);
-						var memValue = Math.Round((double)totalProcessesMemorySizeInBytes / bytesInGigabyte, 2);
+						var memValue = Math.Round((double)totalProcessesMemorySizeInBytes / bytesInGigabyte, 2);					
 						var message = $"Attention! CPU: {cpuValue} %, RAM: {memValue} GB";
 						LongPollingInfrastructure.PublishNotification(message);
 					}

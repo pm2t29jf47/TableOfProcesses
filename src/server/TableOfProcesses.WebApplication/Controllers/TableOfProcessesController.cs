@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 using TableOfProcesses.WebApplication.Helpers;
 using TableOfProcesses.WebApplication.Models;
@@ -19,41 +16,41 @@ namespace TableOfProcesses.WebApplication.Controllers
 
         public TableOfProcessesController(IProcessService processService)
         {
-            this.processService = processService;
+            this.processService = processService ?? throw new ArgumentNullException(nameof(processService));
         }
 
+        /// <summary>
+        /// Get system processes statistics
+        /// </summary>        
         [HttpGet("statistics")]
         public ActionResult<StatisticsResponse> GetStatistics()
-        {            
+        {
             Helper.LogInfo("GetStatistics()", "Begin execution");
             try
             {
                 Helper.LogInfo("GetStatistics()", "End execution");
                 return processService.GetStatistics();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Helper.LogError("GetStatistics()", ex.Message);
                 Helper.LogInfo("GetStatistics()", "End execution");
                 return BadRequest(new { exceptionMessage = ex.Message });
-            }            
+            }
         }
-        
+
+        /// <summary>
+        /// Endpoint for high load notification
+        /// </summary>        
         [HttpGet("notifyme")]
         public async Task<ActionResult<string>> GetNotification()
         {
-            Helper.LogInfo("GetNotification()", "Begin execution");            
+            Helper.LogInfo("GetNotification()", "Begin execution");
             var notificationService = new LongPollingInfrastructure();
             var message = await notificationService.WaitAsync();
             Helper.LogInfo("GetNotification()", message);
-            Helper.LogInfo("GetNotification()", "End execution");            
-            return message;            
-        }
-
-        [HttpGet("doknock")]
-        public void DoKnock()
-        {
-            LongPollingInfrastructure.PublishNotification("knock knock");            
+            Helper.LogInfo("GetNotification()", "End execution");
+            return message;
         }
     }
 }
