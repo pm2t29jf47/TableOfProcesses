@@ -3,6 +3,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using TableOfProcesses.WebApplication.DataAccess;
+using TableOfProcesses.WebApplication.DataAccess.Interfaces;
+using TableOfProcesses.WebApplication.Notifications;
+using TableOfProcesses.WebApplication.Services;
 
 namespace TableOfProcesses.WebApplication
 {
@@ -19,6 +23,9 @@ namespace TableOfProcesses.WebApplication
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddSingleton<IProcessService, ProcessService>();
+            services.AddSingleton<IProcessesDataAccess, ProcessesDataAccess>();
+            services.AddHostedService<ProcessesDataCollector>();            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

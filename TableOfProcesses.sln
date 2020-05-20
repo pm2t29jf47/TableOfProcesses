@@ -8,7 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "client", "client", "{CE213260-9566-42DA-B50F-598D1BC4C391}"
 	ProjectSection(SolutionItems) = preProject
 		src\client\index.html = src\client\index.html
-		src\client\Script1.js = src\client\Script1.js
+		src\client\scripts.js = src\client\scripts.js
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "server", "server", "{B8FDACC0-4330-4F05-9E06-AA2C13051A7C}"

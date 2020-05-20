@@ -6,7 +6,7 @@ using TableOfProcesses.WebApplication.Models;
 
 namespace TableOfProcesses.WebApplication.Services
 {
-    interface IProcessService
+    public interface IProcessService
     {
         /// <summary>
         /// Statistics about processes

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TableOfProcesses.WebApplication.DataAccess.Interfaces
 {
-    public interface IProcessDataAccess
+    public interface IProcessesDataAccess
     {
         /// <summary>
         /// Возвращает данные о процессах

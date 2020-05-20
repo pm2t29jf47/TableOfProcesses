@@ -7,7 +7,7 @@ using TableOfProcesses.WebApplication.DataAccess.Interfaces;
 
 namespace TableOfProcesses.WebApplication.DataAccess
 {
-    public class ProcessessDataAccess : IProcessDataAccess
+    public class ProcessesDataAccess : IProcessesDataAccess
     {
         public Process[] GetProcesses()
         {
