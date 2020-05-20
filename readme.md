@@ -13,10 +13,15 @@ Client: HTML + JavaScript.
 
 Server: WebApplication with REST API (.NET Core 3.1).
 
+#### Server JSON example
+![server-response-example](images/server-response-example.png)
+
+
+#### Client
+![client-work-example](images/client-work-example.png)
+
 ## How to run?
 1) Build in Visual Studio.
 2) Start with IIS Express profile.
 3) Open http://localhost:50253/api/tableofprocesses/statistics to see results from server.
 4) Open ```src\client\index.html``` to see how client is working.
-
-![client-work-example](images/client-work-example.png)

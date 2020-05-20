@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 
 namespace TableOfProcesses.WebApplication.DataAccess.Interfaces
 {
+    /// <summary>
+    /// Process data layer
+    /// </summary>
     public interface IProcessesDataAccess
     {
         /// <summary>
-        /// Возвращает данные о процессах
-        /// </summary>
-        /// <returns></returns>
+        /// All system processes collection
+        /// </summary>        
         public Process[] GetProcesses();
     }
 }
