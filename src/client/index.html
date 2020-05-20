@@ -12,19 +12,42 @@
         table, th, td {
             border: 1px solid black;
         }
+
+        .column {
+            float: left;
+            width: 50%;
+        }
+        
+        .row:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        #alarm-block {
+            color: red;
+        }
     </style>
 </head>
 <body>
     <script type="text/javascript" src="scripts.js"></script>
-    <h3>
-        Nonpaged System Memory Size: <span id="nonpaged-system-memory-size"></span> Bytes
-    </h3>
-    <h3>
-        Paged Memory Size: <span id="paged-memory-size"></span> Bytes
-    </h3>
-    <h4>
-        Table of processes
-    </h4>
+    <div class="row">
+        <div class="column">
+            <h3>
+                Nonpaged System Memory Size: <span id="nonpaged-system-memory-size"></span> Bytes
+            </h3>
+            <h3>
+                Paged Memory Size: <span id="paged-memory-size"></span> Bytes
+            </h3>
+            <h4>
+                Table of processes
+            </h4>
+        </div>
+        <div class="column">
+            <h1 id="alarm-block">           
+            </h1>
+        </div>
+    </div>
     <table id="table-of-processes">
         <thead>
             <tr>
@@ -38,7 +61,7 @@
         </thead>
         <tbody id="table-of-processes-body"></tbody>
     </table>
-    
+
 
 </body>
 </html>

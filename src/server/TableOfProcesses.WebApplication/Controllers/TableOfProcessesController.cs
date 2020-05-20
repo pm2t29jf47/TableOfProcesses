@@ -3,7 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using TableOfProcesses.WebApplication.Models;
+using TableOfProcesses.WebApplication.Notifications;
 using TableOfProcesses.WebApplication.Services;
 
 namespace TableOfProcesses.WebApplication.Controllers
@@ -26,7 +28,22 @@ namespace TableOfProcesses.WebApplication.Controllers
             {                
                 Console.WriteLine($"Time: {DateTime.UtcNow}, Level: Error, Message:{ex.Message}");
                 return BadRequest(new { exceptionMessage = ex.Message });
-            }                       
-        }        
+            }           
+        }
+        
+        [HttpGet("notifyme")]
+        public async Task<ActionResult<string>> GetNotification()
+        {
+            Console.WriteLine($"Time: {DateTime.UtcNow}, Level: Info, Message: TableOfProcesses/notifyme");
+            var notificationService = new LongPollingInfrastructure();
+            var message = await notificationService.WaitAsync();
+            return message;
+        }
+
+        [HttpGet("doknock")]
+        public void DoKnock()
+        {
+            LongPollingInfrastructure.PublishNotification("PID 34 CPU 40%");            
+        }
     }
 }
