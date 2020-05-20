@@ -1,16 +1,15 @@
 ﻿using Microsoft.Extensions.Hosting;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using TableOfProcesses.WebApplication.DataAccess.Interfaces;
-using TableOfProcesses.WebApplication.Helpers;
 
 namespace TableOfProcesses.WebApplication.Notifications
 {
+	/// <summary>
+	/// Processes metrics collector
+	/// </summary>
 	public class ProcessesDataCollector : IHostedService
 	{
 		private readonly IProcessesDataAccess processesDataAccess;
@@ -23,11 +22,12 @@ namespace TableOfProcesses.WebApplication.Notifications
 		{
 			return Task.Factory.StartNew(async () =>
 			{
-				double previousTotalProcessesTimeMs = 0;				
-				var previousTimeStamp = DateTime.UtcNow;								
+				double previousTotalProcessesTimeMs = 0;
+				var previousTimeStamp = DateTime.UtcNow;
 				double cpuThreshold = 0.1;
 				long bytesInGigabyte = 1000000000;
 				long memThreshold = bytesInGigabyte * 5;
+				var refreshTime = TimeSpan.FromSeconds(3);
 				while (!cancellationToken.IsCancellationRequested)
 				{
 					var processes = processesDataAccess.GetProcesses();
@@ -48,7 +48,7 @@ namespace TableOfProcesses.WebApplication.Notifications
 						catch (Win32Exception) { }
 					}
 
-					var totalProcessesTimeSpanMs = totalProcessesTimeMs - previousTotalProcessesTimeMs;					
+					var totalProcessesTimeSpanMs = totalProcessesTimeMs - previousTotalProcessesTimeMs;
 
 					if (totalProcessesTimeSpanMs > cpuThresholdTimeSpanMs || totalProcessesMemorySizeInBytes > memThreshold)
 					{
@@ -56,11 +56,11 @@ namespace TableOfProcesses.WebApplication.Notifications
 						var memValue = Math.Round((double)totalProcessesMemorySizeInBytes / bytesInGigabyte, 2);
 						var message = $"Attention! CPU: {cpuValue} %, RAM: {memValue} GB";
 						LongPollingInfrastructure.PublishNotification(message);
-					}					
+					}
 
 					try
 					{
-						await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
+						await Task.Delay(refreshTime, cancellationToken);
 					}
 					catch (OperationCanceledException) { }
 
