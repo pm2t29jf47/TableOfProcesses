@@ -26,5 +26,31 @@ function refreshTableData(tableBody, data) {
     tableBody.innerHTML = html;
 }
 
+function showAlarm(message) {
+    var alarmBlock = document.getElementById('alarm-block');
+    alarmBlock.innerText = message;
+}
+
+async function notificationSubscribe() {
+    let url = 'http://localhost:50253/api/tableofprocesses/notifyme';
+    let response = await fetch(url);
+    if (response.status == 502) {
+        showAlarm('');
+        await notificationSubscribe();
+    } else if (response.status == 204) {
+        showAlarm('');
+        await notificationSubscribe();
+    } else if (response.status != 200) {        
+        showAlarm(response.statusText);        
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        await notificationSubscribe();
+    } else {        
+        let message = await response.text();       
+        showAlarm(message);        
+        await notificationSubscribe();
+    }
+}
+
 loadStatistics();
 let timer = setInterval(loadStatistics, 500);
+notificationSubscribe();
