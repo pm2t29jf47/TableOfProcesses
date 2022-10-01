@@ -1,32 +1,30 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
-using TableOfProcesses.WebApplication.DataAccess;
 using TableOfProcesses.WebApplication.DataAccess.Interfaces;
+using TableOfProcesses.WebApplication.Helpers;
 using TableOfProcesses.WebApplication.Models;
 
 namespace TableOfProcesses.WebApplication.Services
 {
     public class ProcessService : IProcessService
     {
-        private readonly IProcessDataAccess processDataAccess;
-        public ProcessService()
+        private readonly IProcessesDataAccess processesDataAccess;
+        public ProcessService(IProcessesDataAccess processesDataAccess)
         {
-            this.processDataAccess = new ProcessessDataAccess();
+            this.processesDataAccess = processesDataAccess ?? throw new ArgumentNullException(nameof(processesDataAccess));
         }
 
         public StatisticsResponse GetStatistics()
         {
-            var foundProcesses = processDataAccess.GetProcesses();
+            var foundProcesses = processesDataAccess.GetProcesses();
             var preparedProcesses = foundProcesses.Select(ReadDataFromProcess).ToList();
 
             var result = new StatisticsResponse()
             {
                 processes = preparedProcesses.OrderBy(x => x.Pid).ToList(),
                 SumNonpagedSystemMemorySize64InBytes = preparedProcesses.Sum(x => x.NonpagedSystemMemorySize64InBytes ?? 0),
-                SumPagedMemorySize64InBytes = preparedProcesses.Sum(x => x.PagedMemorySize64InBytes ?? 0)                
+                SumPagedMemorySize64InBytes = preparedProcesses.Sum(x => x.PagedMemorySize64InBytes ?? 0)
             };
 
             return result;
@@ -53,9 +51,10 @@ namespace TableOfProcesses.WebApplication.Services
             }
             catch (InvalidOperationException ex)
             {
-                Console.WriteLine($"Time: {DateTime.UtcNow}, Level: Error, Message:{ex.Message}");
-                return null;
+                Helper.LogError("TryGetIdFromProcess", ex.Message);
             }
+
+            return null;
         }
 
         private static string TryGetProcessNameFromProcess(Process process)
@@ -66,7 +65,7 @@ namespace TableOfProcesses.WebApplication.Services
             }
             catch (InvalidOperationException ex)
             {
-                Console.WriteLine($"Time: {DateTime.UtcNow}, Level: Error, Message:{ex.Message}");                
+                Helper.LogError("TryGetProcessNameFromProcess", ex.Message);
             }
 
             return null;
@@ -80,7 +79,7 @@ namespace TableOfProcesses.WebApplication.Services
             }
             catch (InvalidOperationException ex)
             {
-                Console.WriteLine($"Time: {DateTime.UtcNow}, Level: Error, Message:{ex.Message}");                
+                Helper.LogError("TryGetNonpagedSystemMemorySize64FromProcess", ex.Message);
             }
 
             return null;
@@ -94,7 +93,7 @@ namespace TableOfProcesses.WebApplication.Services
             }
             catch (InvalidOperationException ex)
             {
-                Console.WriteLine($"Time: {DateTime.UtcNow}, Level: Error, Message:{ex.Message}");
+                Helper.LogError("TryGetpagedMemorySize64FromProcess", ex.Message);
             }
 
             return null;
@@ -108,11 +107,11 @@ namespace TableOfProcesses.WebApplication.Services
             }
             catch (InvalidOperationException ex)
             {
-                Console.WriteLine($"Time: {DateTime.UtcNow}, Level: Error, Message:{ex.Message}");
+                Helper.LogError("TryGetTotalProcessorTimeFromProcess", ex.Message);
             }
             catch (System.ComponentModel.Win32Exception ex)
             {
-                Console.WriteLine($"Time: {DateTime.UtcNow}, Level: Error, Message:{ex.Message}");                
+                Helper.LogError("TryGetTotalProcessorTimeFromProcess", ex.Message);
             }
 
             return null;
@@ -126,10 +125,10 @@ namespace TableOfProcesses.WebApplication.Services
             }
             catch (InvalidOperationException ex)
             {
-                Console.WriteLine($"Time: {DateTime.UtcNow}, Level: Error, Message:{ex.Message}");
+                Helper.LogError("TryGetWorkingSet64FromProcess", ex.Message);
             }
 
             return null;
         }
-    }    
+    }
 }

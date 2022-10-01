@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 using TableOfProcesses.WebApplication.DataAccess.Interfaces;
 
 namespace TableOfProcesses.WebApplication.DataAccess
 {
-    public class ProcessessDataAccess : IProcessDataAccess
+    public class ProcessesDataAccess : IProcessesDataAccess
     {
         public Process[] GetProcesses()
         {
