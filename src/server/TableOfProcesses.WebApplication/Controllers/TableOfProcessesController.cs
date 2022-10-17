@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Serilog;
+using Serilog.Events;
 using System;
+using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
-using TableOfProcesses.WebApplication.Helpers;
 using TableOfProcesses.WebApplication.Models;
 using TableOfProcesses.WebApplication.Notifications;
 using TableOfProcesses.WebApplication.Services;
@@ -10,9 +13,11 @@ namespace TableOfProcesses.WebApplication.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TableOfProcessesController : ControllerBase
+    public class TableOfProcessesController:ControllerBase
     {
         private readonly IProcessService processService;
+
+        private readonly bool _isDebug = Log.IsEnabled(LogEventLevel.Debug);
 
         public TableOfProcessesController(IProcessService processService)
         {
@@ -25,16 +30,22 @@ namespace TableOfProcesses.WebApplication.Controllers
         [HttpGet("statistics")]
         public ActionResult<StatisticsResponse> GetStatistics()
         {
-            Helper.LogInfo("GetStatistics()", "Begin execution");
+            var currentMethod = _isDebug ? MethodBase.GetCurrentMethod() : null;
+            Log.Debug("Begin execution. Method: {type} {method}", currentMethod?.ReflectedType.FullName, currentMethod?.Name);
+
             try
             {
-                Helper.LogInfo("GetStatistics()", "End execution");
-                return processService.GetStatistics();
+                Thread.Sleep(1000 * 20);
+                var result = processService.GetStatistics();
+                Log.Debug("End execution. Method: {type} {method}", currentMethod?.ReflectedType.FullName, currentMethod?.Name);
+
+                return result;
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
-                Helper.LogError("GetStatistics()", ex.Message);
-                Helper.LogInfo("GetStatistics()", "End execution");
+                Log.Error("Exception handled. Method: {type} {method} Exception: {@ex}", currentMethod.ReflectedType.FullName, currentMethod.Name, ex);
+                Log.Debug("End execution. Method: {type} {method}", currentMethod?.ReflectedType.FullName, currentMethod?.Name);
+
                 return BadRequest(new { exceptionMessage = ex.Message });
             }
         }
@@ -45,12 +56,24 @@ namespace TableOfProcesses.WebApplication.Controllers
         [HttpGet("notifyme")]
         public async Task<ActionResult<string>> GetNotification()
         {
-            Helper.LogInfo("GetNotification()", "Begin execution");
-            var notificationService = new LongPollingInfrastructure();
-            var message = await notificationService.WaitAsync();
-            Helper.LogInfo("GetNotification()", message);
-            Helper.LogInfo("GetNotification()", "End execution");
-            return message;
+            var currentMethod = _isDebug ? MethodBase.GetCurrentMethod() : null;
+            Log.Debug("Begin execution. Method: {method}", currentMethod?.ReflectedType.FullName);
+
+            try
+            {
+                var notificationService = new LongPollingInfrastructure();
+                var message = await notificationService.WaitAsync();
+                Log.Debug("End execution. Method: {method}", currentMethod?.ReflectedType.FullName);
+
+                return message;
+            }
+            catch(Exception ex)
+            {
+                Log.Error("Exception handled. Method: {method} Exception: {@ex}", currentMethod.ReflectedType.FullName, ex);
+                Log.Debug("End execution. Method: {method}", currentMethod?.ReflectedType.FullName);
+
+                return BadRequest(new { exceptionMessage = ex.Message });
+            }
         }
     }
 }

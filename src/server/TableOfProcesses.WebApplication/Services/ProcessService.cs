@@ -1,14 +1,17 @@
-﻿using System;
+﻿using Serilog.Events;
+using Serilog;
+using System;
 using System.Diagnostics;
 using System.Linq;
 using TableOfProcesses.WebApplication.DataAccess.Interfaces;
-using TableOfProcesses.WebApplication.Helpers;
 using TableOfProcesses.WebApplication.Models;
+using System.Reflection;
 
 namespace TableOfProcesses.WebApplication.Services
 {
     public class ProcessService : IProcessService
     {
+        private readonly bool _isDebug = Log.IsEnabled(LogEventLevel.Debug);
         private readonly IProcessesDataAccess processesDataAccess;
         public ProcessService(IProcessesDataAccess processesDataAccess)
         {
@@ -43,7 +46,7 @@ namespace TableOfProcesses.WebApplication.Services
             };
         }
 
-        private static int? TryGetIdFromProcess(Process process)
+        private int? TryGetIdFromProcess(Process process)
         {
             try
             {
@@ -51,13 +54,14 @@ namespace TableOfProcesses.WebApplication.Services
             }
             catch (InvalidOperationException ex)
             {
-                Helper.LogError("TryGetIdFromProcess", ex.Message);
+                var currentMethod = MethodBase.GetCurrentMethod();
+                Log.Error("Exception handled. Type: {type} Method: {method} Exception: {@ex}", currentMethod.ReflectedType.FullName, currentMethod.Name, ex);
             }
 
             return null;
         }
 
-        private static string TryGetProcessNameFromProcess(Process process)
+        private string TryGetProcessNameFromProcess(Process process)
         {
             try
             {
@@ -65,13 +69,14 @@ namespace TableOfProcesses.WebApplication.Services
             }
             catch (InvalidOperationException ex)
             {
-                Helper.LogError("TryGetProcessNameFromProcess", ex.Message);
+                var currentMethod = MethodBase.GetCurrentMethod();
+                Log.Error("Exception handled. Type: {type} Method: {method} Exception: {@ex}", currentMethod.ReflectedType.FullName, currentMethod.Name, ex);
             }
 
             return null;
         }
 
-        private static long? TryGetNonpagedSystemMemorySize64FromProcess(Process process)
+        private long? TryGetNonpagedSystemMemorySize64FromProcess(Process process)
         {
             try
             {
@@ -79,13 +84,14 @@ namespace TableOfProcesses.WebApplication.Services
             }
             catch (InvalidOperationException ex)
             {
-                Helper.LogError("TryGetNonpagedSystemMemorySize64FromProcess", ex.Message);
+                var currentMethod = MethodBase.GetCurrentMethod();
+                Log.Error("Exception handled. Type: {type} Method: {method} Exception: {@ex}", currentMethod.ReflectedType.FullName, currentMethod.Name, ex);
             }
 
             return null;
         }
 
-        private static long? TryGetpagedMemorySize64FromProcess(Process process)
+        private long? TryGetpagedMemorySize64FromProcess(Process process)
         {
             try
             {
@@ -93,13 +99,14 @@ namespace TableOfProcesses.WebApplication.Services
             }
             catch (InvalidOperationException ex)
             {
-                Helper.LogError("TryGetpagedMemorySize64FromProcess", ex.Message);
+                var currentMethod = MethodBase.GetCurrentMethod();
+                Log.Error("Exception handled. Type: {type} Method: {method} Exception: {@ex}", currentMethod.ReflectedType.FullName, currentMethod.Name, ex);
             }
 
             return null;
         }
 
-        private static TimeSpan? TryGetTotalProcessorTimeFromProcess(Process process)
+        private TimeSpan? TryGetTotalProcessorTimeFromProcess(Process process)
         {
             try
             {
@@ -107,17 +114,19 @@ namespace TableOfProcesses.WebApplication.Services
             }
             catch (InvalidOperationException ex)
             {
-                Helper.LogError("TryGetTotalProcessorTimeFromProcess", ex.Message);
+                var currentMethod = MethodBase.GetCurrentMethod();
+                Log.Error("Exception handled. Type: {type} Method: {method} Exception: {@ex}", currentMethod.ReflectedType.FullName, currentMethod.Name, ex);
             }
             catch (System.ComponentModel.Win32Exception ex)
             {
-                Helper.LogError("TryGetTotalProcessorTimeFromProcess", ex.Message);
+                var currentMethod = MethodBase.GetCurrentMethod();
+                Log.Error("Exception handled. Type: {type} Method: {method} Exception: {@ex}", currentMethod.ReflectedType.FullName, currentMethod.Name, ex);
             }
 
             return null;
         }
 
-        private static long? TryGetWorkingSet64FromProcess(Process process)
+        private long? TryGetWorkingSet64FromProcess(Process process)
         {
             try
             {
@@ -125,7 +134,8 @@ namespace TableOfProcesses.WebApplication.Services
             }
             catch (InvalidOperationException ex)
             {
-                Helper.LogError("TryGetWorkingSet64FromProcess", ex.Message);
+                var currentMethod = MethodBase.GetCurrentMethod();
+                Log.Error("Exception handled. Type: {type} Method: {method} Exception: {@ex}", currentMethod.ReflectedType.FullName, currentMethod.Name, ex);
             }
 
             return null;
