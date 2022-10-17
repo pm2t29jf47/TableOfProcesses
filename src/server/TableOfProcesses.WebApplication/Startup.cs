@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Serilog;
 using TableOfProcesses.WebApplication.DataAccess;
 using TableOfProcesses.WebApplication.DataAccess.Interfaces;
 using TableOfProcesses.WebApplication.Notifications;
@@ -35,6 +36,8 @@ namespace TableOfProcesses.WebApplication
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseSerilogRequestLogging();
 
             app.UseHttpsRedirection();
 
